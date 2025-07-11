@@ -10,8 +10,8 @@ class CustomerPortal(portal.CustomerPortal):
         auth="user",
         website=True,
     )
-    def _invoice_get_page_view(self, page=1, filterby=None, **kw):
-        response = super()._invoice_get_page_view(page, filterby, **kw)
+    def portal_my_invoices(self, page=1, filterby=None, **kw):
+        response = super().portal_my_invoices(page, filterby, **kw)
         if filterby == "invoices":
             user = request.env.user
             response.qcontext.update(
