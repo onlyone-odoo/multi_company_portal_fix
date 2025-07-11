@@ -1,6 +1,7 @@
 # custom_module/controllers/portal.py
 from odoo import http
 from odoo.addons.account.controllers import portal
+from odoo.http import request
 
 
 class CustomerPortal(portal.CustomerPortal):
@@ -11,13 +12,12 @@ class CustomerPortal(portal.CustomerPortal):
         website=True,
     )
     def portal_my_invoices(self, page=1, filterby=None, **kw):
-        user = request.env.user
-        request.update_context(allowed_company_ids=user.company_ids.ids)
+        request.update_context(allowed_company_ids=request.env.user.company_ids.ids)
         response = super().portal_my_invoices(page, filterby, **kw)
         if filterby == "invoices":
             response.qcontext.update(
                 {
-                    "allowed_company_ids": user.company_ids.ids,
+                    "allowed_company_ids": request.env.user.company_ids.ids,
                 }
             )
         return response
